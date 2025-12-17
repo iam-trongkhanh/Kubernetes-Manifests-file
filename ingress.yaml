@@ -1,0 +1,37 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: mern-stack-ingress
+  namespace: __________ (target namespace for frontend/backend/db)
+  labels:
+    app.kubernetes.io/name: mern-stack-ingress
+    app.kubernetes.io/instance: __________ (release/instance identifier, e.g., prod-usw2)
+    app.kubernetes.io/component: edge
+    app.kubernetes.io/part-of: mern-stack
+    app.kubernetes.io/managed-by: k8s-manifests
+  # TODO: add controller-specific annotations for HTTPS redirect/WAF/IP-allow as required
+  annotations: {}
+spec:
+  ingressClassName: __________ (ingressClass matching installed controller, e.g., nginx or alb)
+  tls:
+    - hosts:
+        - __________ (application FQDN)
+      secretName: __________ (TLS secret containing cert for the host)
+  rules:
+    - host: __________ (application FQDN)
+      http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: backend
+                port:
+                  number: 3001
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: mern-frontend
+                port:
+                  number: 80

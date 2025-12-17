@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mern-frontend-config
+  # TODO: set namespace (match Deployment)
+  labels:
+    app.kubernetes.io/name: mern-frontend
+    app.kubernetes.io/component: frontend
+    app.kubernetes.io/part-of: mern-frontend
+    app.kubernetes.io/managed-by: kustomize
+data:
+  VITE_API_URL: "________ (API base URL; note: Vite embeds at build time — requires rebuild or server-side env injection mechanism)"

@@ -1,0 +1,24 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: mern-frontend
+  # TODO: set namespace (match Deployment)
+  labels:
+    app.kubernetes.io/name: mern-frontend
+    app.kubernetes.io/component: frontend
+    app.kubernetes.io/part-of: mern-frontend
+    app.kubernetes.io/managed-by: kustomize
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: mern-frontend
+  minReplicas: 2
+  maxReplicas: 5 # TODO: tune for traffic patterns
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 60 # TODO: tune threshold
